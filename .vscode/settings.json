@@ -1,0 +1,4 @@
+{
+    "ruby.rubocop.executePath": "~/.rbenv/versions/2.6.3/bin/",
+    "solargraph.commandPath": "~/.rbenv/versions/2.6.3/bin/"
+}

@@ -1,12 +1,13 @@
 require 'telegram/bot'
-%w[wotd firepit horse reiki commands].each { |file| load "./#{file}.rb" }
+require 'dotenv/load'
 
-TOKEN = '997881337:AAGouFY6oTXSLEA4lVMdiZ-oESQ0Gxw7KCs'
+%w[wotd firepit horse reiki commands ai].each { |file| load "./#{file}.rb" }
+
+TOKEN = ENV['TELEGRAM_TOKEN']
+ADMIN_ID = ENV['ADMIN_ID']
 ANIMATIONS = {
   wotd: 'https://i.imgur.com/0m8gG1T.gif'
 }
-
-ADMIN_ID = 106777987
 
 class CommandRegistry
   def initialize
@@ -68,7 +69,7 @@ class JanetBot
     end
 
     # Handle other commands
-    if handler = @registry.find_handler(message.text)
+    if (handler = @registry.find_handler(message.text))
       instance_exec(bot, message, &handler)
     end
   end
@@ -107,6 +108,10 @@ class JanetBot
       3. Drink Malort.
       This works with any mixer of your choice. Enjoy!
     RECIPE
+  end
+
+  def silly_response(message)
+    AI::SillyDefine.new.run(message)
   end
 end
 

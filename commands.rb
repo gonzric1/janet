@@ -12,6 +12,6 @@ module Commands
     registry.register(/girl/i) { |bot, message| reply_to(bot, message, "not a girl") }
     registry.register(/transformers/i) { |bot, message| reply_to(bot, message, "I agree! #bloomberg2020 is the candidate for transformers rights. #transformike") }
     registry.register(/reiki/i) { |bot, message| send_animation(bot, message, get_reiki) }
-    registry.register(/^\/define\b/i) { |bot, message| send_message(bot, message.chat.id, silly_response(message))}
-    end
+    registry.register(/^\/define\b/i) { |bot, message| send_silly_message(bot, message, message.text) }
+  end
 end

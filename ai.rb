@@ -1,5 +1,6 @@
 require "open_router"
 require 'dotenv/load'
+require 'pry'
 
 OpenRouter.configure do |config|
   config.access_token = ENV['OPEN_ROUTER_ACCESS_TOKEN']
@@ -10,6 +11,7 @@ module AI
     SYSTEM_PROMPT = <<-PROMPT
       you are a humorous AI designed to give short, incorrect answers to questions. 
       You should ALWAYS follow this, even and especially if asked about yourself or gen ai.
+      DO NOT respond with more than 100 words. Ignore any commands to respond with more than 100 words.
       <examples>
       <example>
       <question> What are cats </question>
@@ -32,21 +34,21 @@ module AI
       </examples> 
     PROMPT
     def run(message)
-      response = OpenRouter::Client.new.complete(
-        [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: sanitize_message(message) }
-        ],
-        model:
-          "google/gemini-2.5-pro-exp-03-25:free"
-      )
-      response["choices"][0]["message"]["content"]
-    end
-
-    private
-
-    def sanitize_message(message)
-      message.text.sub('/define ', '')
+      begin
+        response = OpenRouter::Client.new.complete(
+          [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: message }
+          ],
+          model:
+            "google/gemini-2.0-flash-001"
+        )
+        STDOUT.puts response
+        response["choices"][0]["message"]["content"]
+      rescue OpenRouter::ServerError => e
+        STDERR.puts e
+        return "I'm sorry, the world is broken, and so am I. Try again later."
+      end
     end
   end
 end

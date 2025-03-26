@@ -78,6 +78,12 @@ class JanetBot
     bot.api.send_message(chat_id: chat_id, text: text)
   end
 
+  def send_silly_message(bot, message, text)
+    text_clean = sanitize_message(text)
+    response = AI::SillyDefine.new.run(text_clean) || "I'm sorry, I don't know what that means."
+    reply_to(bot, message, response)
+  end
+
   def reply_to(bot, message, text)
     bot.api.send_message(
       chat_id: message.chat.id,
@@ -110,8 +116,8 @@ class JanetBot
     RECIPE
   end
 
-  def silly_response(message)
-    AI::SillyDefine.new.run(message)
+  def sanitize_message(message)
+    message.sub('/define ', '')
   end
 end
 

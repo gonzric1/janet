@@ -1,7 +1,8 @@
 require 'telegram/bot'
 require 'dotenv/load'
 
-%w[wotd firepit horse reiki commands ai].each { |file| load "./#{file}.rb" }
+
+%w[wotd firepit horse reiki commands ai].each { |file| require_relative '' "#{file}" }
 
 TOKEN = ENV['TELEGRAM_TOKEN']
 ADMIN_ID = ENV['ADMIN_ID']
@@ -33,17 +34,20 @@ class CommandRegistry
 end
 
 class JanetBot
-  # Remove extend Commands since we're using class methods directly
-  
   def initialize
     @games = {}
     @registry = CommandRegistry.new
-    Commands.register_commands(@registry)  # Call class method directly
+    Commands.register_commands(@registry)
+    @stopped = false
   end
 
-  def start
-    Telegram::Bot::Client.run(TOKEN) do |bot|
-      bot.listen { |message| handle_message(bot, message) }
+  def run
+    begin
+      Telegram::Bot::Client.run(TOKEN) do |bot|
+        bot.listen { |message| handle_message(bot, message) }
+      end
+    rescue Telegram::Bot::Exceptions::ResponseError => e
+        STDERR.puts e
     end
   end
 
@@ -70,6 +74,7 @@ class JanetBot
 
     # Handle other commands
     if (handler = @registry.find_handler(message.text))
+      STDOUT.puts "Handling command: #{message.text}"
       instance_exec(bot, message, &handler)
     end
   end
@@ -80,6 +85,7 @@ class JanetBot
 
   def send_silly_message(bot, message, text)
     text_clean = sanitize_message(text)
+    return unless text_clean
     response = AI::SillyDefine.new.run(text_clean) || "I'm sorry, I don't know what that means."
     reply_to(bot, message, response)
   end
@@ -119,6 +125,21 @@ class JanetBot
   def sanitize_message(message)
     message.sub('/define ', '')
   end
+
+  # def stopped?
+  #   STDOUT.puts "Stopped: #{@stopped}"
+  #   @stopped
+  # end
+  #
+  # def stop
+  #   STDOUT.puts "Stopping bot"
+  #   @stopped = true
+  # end
+  #
+  # def start
+  #   STDOUT.puts "Starting bot"
+  #   @stopped = false
+  # end
 end
 
-JanetBot.new.start
+JanetBot.new.run

@@ -1,3 +1,4 @@
+
 module Commands
   def self.register_commands(registry)
     registry.register('/start') { |bot, message| send_message(bot, message.chat.id, "Hello, #{message.from.first_name}. I'm GayJanet. Nice to meet you!") }

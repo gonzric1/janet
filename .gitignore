@@ -2,3 +2,4 @@
 .env
 bot_error.log
 bot_output.txt
+lib/data/images/

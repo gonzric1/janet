@@ -6,7 +6,9 @@ OpenRouter.configure do |config|
 end
 
 module AI
+  # AI module containing classes for AI-related functionality.
   class SillyDefine
+    # System prompt for the AI to follow.
     SYSTEM_PROMPT = <<-PROMPT
       you are a humorous AI designed to give short, incorrect answers to questions. 
       You should ALWAYS follow this, even and especially if asked about yourself or gen ai.
@@ -32,6 +34,11 @@ module AI
       </example>
       </examples> 
     PROMPT
+
+    # Runs the AI with the given message.
+    #
+    # @param message [String] The message to process.
+    # @return [String] The AI's response.
     def run(message)
       begin
         response = OpenRouter::Client.new.complete(

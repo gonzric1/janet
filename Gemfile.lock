@@ -101,6 +101,7 @@ PLATFORMS
 
 DEPENDENCIES
   dotenv (~> 3.1)
+  faraday (~> 2.12)
   httparty (~> 0.22.0)
   open_router (~> 0.3.3)
   pry (~> 0.15.2)

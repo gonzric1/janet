@@ -1,0 +1,8 @@
+name: "Three Card Spread"
+slots:
+  - position: "Past"
+    meaning: "Represents past events that influence the present."
+  - position: "Present"
+    meaning: "Represents current events and situations."
+  - position: "Future"
+    meaning: "Represents possible future outcomes."

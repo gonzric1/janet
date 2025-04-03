@@ -9,3 +9,5 @@ gem "dotenv", "~> 3.1"
 gem "open_router", "~> 0.3.3"
 
 gem "pry", "~> 0.15.2"
+
+gem "faraday", "~> 2.12"

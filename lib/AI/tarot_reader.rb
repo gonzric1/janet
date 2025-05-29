@@ -7,7 +7,7 @@ module AI
           SYSTEM_PROMPT = <<~PROMPT
       You are a tarot reader. You will be given a tarot card inside <card_drawn> tag  with it's name and meaning, 
       and a question inside <question> tag,
-      Provide a meaningful interpretation of the card based on the question. Be sure to include the card name and
+      For each <card_drawn> Provide a meaningful interpretation of the card based on the question. Be sure to include the card name and
       slot purpose. 
 
       Keep your response short and concise, this is only one card out of many. 
@@ -52,8 +52,10 @@ module AI
 
     def generate_content(question)
       prompt = <<~PROMPT
-        `"<question> #{question}.</question>
+        "<question> #{question}.</question>
           <card_drawn>#{@reading.deal_one_slot}"</card_drawn>
+          <card_drawn>#{@reading.deal_one_slot}"</card_drawn>
+          <card_drawn>#{@reading.deal_one_slot}"</card_drawn>"
       PROMPT
       puts prompt
       prompt

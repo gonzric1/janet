@@ -1,5 +1,5 @@
 require 'yaml'
-
+require 'json'
 class Deck
   # initialize the deck with an empty array of cards
   # load ./data/cards.json and create Card objects from the data, add to deck
